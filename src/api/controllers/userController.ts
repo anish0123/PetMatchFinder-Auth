@@ -1,12 +1,4 @@
 import jwt from 'jsonwebtoken';
-// Description: This file contains the functions for the user routes
-// TODO: add function check, to check if the server is alive
-// TODO: add function to get all users
-// TODO: add function to get a user by id
-// TODO: add function to create a user
-// TODO: add function to update a user
-// TODO: add function to delete a user
-// TODO: add function to check if a token is valid
 import {Request, Response, NextFunction} from 'express';
 import {User, UserWithoutPassword} from '../../types/DBTypes';
 import {MessageResponse} from '../../types/MessageTypes';
@@ -51,7 +43,10 @@ const userPost = async (
   next: NextFunction
 ) => {
   try {
-    req.body.role = 'user';
+    if (req.body.role !== 'lister' && req.body.role !== 'adopter') {
+      throw new CustomError('Role must be adopter or lister', 400);
+    }
+
     req.body.password = bcrypt.hashSync(req.body.password, 10);
     const user = await userModel.create(req.body);
     console.log('user: ', user);
@@ -67,10 +62,15 @@ const userPost = async (
 
 const userPut = async (
   req: Request<{}, {}, Omit<User, 'user_id'>>,
-  res: Response<MessageResponse & {user: User}>,
+  res: Response<MessageResponse & {token: string; user: UserWithoutPassword}>,
   next: NextFunction
 ) => {
   try {
+    if (!process.env.JWT_SECRET) {
+      console.log('workingg');
+      throw new CustomError('JWT secret not set', 500);
+    }
+
     const authHeader = req.headers.authorization;
     if (authHeader) {
       const token = authHeader?.split(' ')[1];
@@ -86,13 +86,16 @@ const userPut = async (
         .findByIdAndUpdate(userFromToken._id, req.body, {
           new: true,
         })
-        .select('-password -__v -role');
+        .select('-password -__v');
       if (!user) {
         throw new CustomError('No user found', 404);
       }
+      const newToken = jwt.sign(user.toJSON(), process.env.JWT_SECRET);
+      console.log('newToken: ', newToken);
       const response = {
         message: 'User updated',
         user: user,
+        token: newToken,
       };
       res.json(response);
     }

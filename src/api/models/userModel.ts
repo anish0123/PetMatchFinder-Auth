@@ -17,12 +17,24 @@ const userModel = new mongoose.Schema<User>({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
+    enum: ['adopter', 'lister', 'admin'],
+    default: 'adopter',
   },
   password: {
     type: String,
     minlength: [4, 'Password must be at least 4 characters'],
+  },
+  streetAddress: {
+    type: String,
+    minlength: [4, 'Password must be at least 4 characters'],
+  },
+  postalCode: {
+    type: String,
+    minlength: [2, 'Password must be at least 2 characters'],
+  },
+  city: {
+    type: String,
+    minlength: [2, 'Password must be at least 2 characters'],
   },
 });
 

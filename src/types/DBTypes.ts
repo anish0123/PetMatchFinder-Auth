@@ -6,37 +6,58 @@ type Category = {
   category_name: string;
 };
 
-type Species = Partial<Document> & {
-  species_name: string;
+type Animal = Partial<Document> & {
+  animal_id: mongoose.Types.ObjectId;
+  animal_name: string;
   category: mongoose.Types.ObjectId;
+  birthdate: Date;
+  owner: mongoose.Types.ObjectId;
+  gender: 'male' | 'female';
   image: string;
   location: Point;
-};
-
-type Animal = Partial<Document> & {
-  animal_name: string;
-  species: mongoose.Types.ObjectId;
-  birthdate: Date;
-  gender: 'male' | 'female';
-  owner: mongoose.Types.ObjectId;
+  weight: number;
+  listedDate: Date;
 };
 
 type User = Partial<Document> & {
   user_name: string;
   email: string;
   password: string;
-  role: 'user' | 'admin';
+  role: 'adopter' | 'lister' | 'admin';
+  streetAddress: string;
+  postalCode: String;
+  city: string;
+};
+
+type TokenContent = {
+  token: string;
+  user: UserWithoutPassword;
 };
 
 type UserWithoutPassword = Omit<User, 'password'>;
 
+type UserInput = Omit<User, 'id' | 'role'>;
+
 type UserWithoutPasswordRole = Omit<UserWithoutPassword, 'role'>;
+
+type coordinates = {
+  lat: number;
+  lng: number;
+};
+
+type LocationInput = {
+  topRight: coordinates;
+  bottomLeft: coordinates;
+};
 
 export {
   Category,
-  Species,
   Animal,
   User,
+  TokenContent,
+  UserInput,
   UserWithoutPassword,
   UserWithoutPasswordRole,
+  coordinates,
+  LocationInput,
 };
