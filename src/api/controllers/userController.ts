@@ -43,7 +43,7 @@ const userPost = async (
   next: NextFunction
 ) => {
   try {
-    if (req.body.role !== 'lister' && req.body.role !== 'adopter') {
+    if (req.body.role !== 'user') {
       throw new CustomError('Role must be adopter or lister', 400);
     }
 
