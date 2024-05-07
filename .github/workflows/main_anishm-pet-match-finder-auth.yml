@@ -22,6 +22,9 @@ jobs:
           node-version: '20.x'
 
       - name: npm install, build, and test
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           npm install
           npm run build --if-present
@@ -53,7 +56,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -68,4 +71,3 @@ jobs:
           app-name: 'anishm-pet-match-finder-Auth'
           slot-name: 'Production'
           package: .
-          
