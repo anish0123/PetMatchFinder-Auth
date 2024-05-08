@@ -35,9 +35,6 @@ const login = async (
       _id: user._id,
       email: user.email,
       user_name: user.user_name,
-      streetAddress: user.streetAddress,
-      postalCode: user.postalCode,
-      city: user.city,
     };
 
     const tokenContent: UserWithoutPassword = {
@@ -45,9 +42,6 @@ const login = async (
       email: user.email,
       user_name: user.user_name,
       role: user.role,
-      streetAddress: user.streetAddress,
-      postalCode: user.postalCode,
-      city: user.city,
     };
 
     const token = jwt.sign(tokenContent, process.env.JWT_SECRET);

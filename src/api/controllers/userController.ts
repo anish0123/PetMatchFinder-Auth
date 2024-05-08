@@ -43,19 +43,20 @@ const userPost = async (
   next: NextFunction
 ) => {
   try {
+    console.log('req: ', req.body);
     if (req.body.role !== 'user') {
-      throw new CustomError('Role must be adopter or lister', 400);
+      throw new CustomError('Role must be user', 400);
     }
 
     req.body.password = bcrypt.hashSync(req.body.password, 10);
     const user = await userModel.create(req.body);
-    console.log('user: ', user);
     const response = {
       message: 'User added',
       data: user,
     };
     res.json(response);
   } catch (error) {
+    console.log('error: ', error);
     next(error);
   }
 };

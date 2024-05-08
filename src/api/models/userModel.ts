@@ -24,18 +24,6 @@ const userModel = new mongoose.Schema<User>({
     type: String,
     minlength: [4, 'Password must be at least 4 characters'],
   },
-  streetAddress: {
-    type: String,
-    minlength: [4, 'Password must be at least 4 characters'],
-  },
-  postalCode: {
-    type: String,
-    minlength: [2, 'Password must be at least 2 characters'],
-  },
-  city: {
-    type: String,
-    minlength: [2, 'Password must be at least 2 characters'],
-  },
 });
 
 // Duplicate the ID field.

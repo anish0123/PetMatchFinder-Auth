@@ -24,9 +24,6 @@ type User = Partial<Document> & {
   email: string;
   password: string;
   role: 'user' | 'admin';
-  streetAddress: string;
-  postalCode: String;
-  city: string;
 };
 
 type TokenContent = {
